@@ -1,0 +1,95 @@
+﻿@model IEnumerable<TH2.Models.Order>
+
+@{
+    ViewData["Title"] = "Quản Lý Đơn Hàng";
+}
+
+<style>
+    body {
+        background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+        transition: 0.2s;
+    }
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="glass-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary fw-bold m-0"><i class="bi bi-box-seam"></i> Quản Lý Đơn Hàng</h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th>Mã Đơn</th>
+                        <th>Ngày Đặt</th>
+                        <th>Khách Hàng</th>
+                        <th>Tổng Tiền</th>
+                        <th>Trạng Thái</th>
+                        <th>Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr class="text-center">
+                                <td class="fw-bold text-secondary">#@item.Id</td>
+                                <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@item.CustomerName</td>
+                                <td class="text-danger fw-bold">@item.TotalAmount.ToString("#,##0") VNĐ</td>
+                                <td>
+                                    @if (item.OrderStatus == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Chờ xử lý</span>
+                                    }
+                                    else if (item.OrderStatus == "Shipping")
+                                    {
+                                        <span class="badge bg-info text-dark">Đang giao</span>
+                                    }
+                                    else if (item.OrderStatus == "Completed")
+                                    {
+                                        <span class="badge bg-success">Hoàn thành</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Đã hủy</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group shadow-sm" role="group">
+                                        <a asp-action="Display" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary fw-bold"><i class="bi bi-eye"></i> Xem</a>
+                                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning fw-bold"><i class="bi bi-pencil"></i> Sửa</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger fw-bold"><i class="bi bi-trash"></i> Xóa</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">Chưa có đơn hàng nào trong hệ thống.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@model TH2.Models.Product
+@{
+    ViewData["Title"] = "Xóa Sản Phẩm";
+}
+
+<style>
+    body {
+        background-image: url('/images/mclaren-765lt-night-3840x2563-20401.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .form-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 35px rgba(220, 53, 69, 0.2);
+        border-top: 5px solid #dc3545;
+    }
+</style>
+
+<div class="container mt-5 d-flex justify-content-center mb-5">
+    <div class="col-md-8 col-lg-6 form-card text-center">
+
+        <div class="mb-4">
+            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 4rem;"></i>
+        </div>
+
+        <h2 class="text-danger mb-3 fw-bold">Xác Nhận Xóa</h2>
+        <p class="fs-5 text-muted mb-4">Bạn có chắc chắn muốn xóa sản phẩm <strong class="text-dark">@Model.Name</strong> không? Hành động này không thể hoàn tác!</p>
+
+        <div class="bg-light p-4 rounded-3 mb-4 text-start border">
+            <p class="mb-2"><strong>Giá:</strong> <span class="text-danger fw-bold">@Model.Price.ToString("#,##0") VNĐ</span></p>
+            <p class="mb-4"><strong>Mô tả:</strong> @Model.Description</p>
+
+            <hr class="text-muted" />
+
+            <p class="mb-2 fw-bold text-secondary">Ảnh đại diện:</p>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="mb-4 text-center">
+                    <img src="@Model.ImageUrl" style="width: 140px; height: 140px; object-fit: cover;" class="rounded shadow-sm border border-2 border-white" />
+                </div>
+            }
+            else
+            {
+                <p class="text-muted small fst-italic">Không có ảnh đại diện</p>
+            }
+
+            <p class="mb-2 fw-bold text-secondary">Các góc chụp khác (Ảnh phụ):</p>
+            @if (Model.Images != null && Model.Images.Any())
+            {
+                <div class="d-flex flex-wrap gap-2 justify-content-center">
+                    @foreach (var img in Model.Images)
+                    {
+                        <img src="@img.Url" style="width: 80px; height: 80px; object-fit: cover;" class="rounded shadow-sm border border-2 border-white" />
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted small text-center fst-italic">Không có ảnh phụ</p>
+            }
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-danger btn-lg px-5 shadow">Có, Xóa Ngay!</button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg px-5 shadow">Quay Lại</a>
+            </div>
+        </form>
+
+    </div>
+</div>

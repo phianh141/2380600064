@@ -1,0 +1,116 @@
+﻿@model TH2.Models.Product
+
+<style>
+    body {
+       
+        background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .display-card {
+        background: rgba(255, 255, 255, 0.95); /* Nền trắng hơi mờ để nổi chữ */
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .main-img-container {
+        height: 500px; /* Khung ảnh to hơn */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<div class="container mt-5 mb-5 display-card">
+    <h1 class="text-primary mb-5 fw-bold text-center">Sản phẩm: @Model.Name</h1>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center p-2 main-img-container">
+                    <img id="mainImage" src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded" style="max-height: 480px; object-fit: contain; transition: 0.3s;" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 mb-4 bg-white">
+                <div class="card-body p-4">
+                    <h2 class="text-danger fw-bold mb-3">Giá: @Model.Price VNĐ</h2>
+                    <hr />
+                    <h4 class="mt-4 fw-bold">Mô tả sản phẩm:</h4>
+                    <p class="fs-5 text-muted mt-2" style="line-height: 1.8;">@Model.Description</p>
+                </div>
+            </div>
+
+            @if (Model.Images != null && Model.Images.Any())
+            {
+                <h5 class="mb-3 text-secondary fw-bold">Các góc chụp khác:</h5>
+                <div class="d-flex flex-wrap gap-3">
+
+                    <div class="border rounded p-1 shadow-sm bg-white" style="cursor: pointer;" onclick="changeMainImage('@Model.ImageUrl')">
+                        <img src="@Model.ImageUrl" alt="Ảnh chính" class="rounded" style="width: 140px; height: 140px; object-fit: cover;" />
+                    </div>
+
+                    @foreach (var image in Model.Images)
+                    {
+                        <div class="border rounded p-1 shadow-sm bg-white" style="cursor: pointer;" onclick="changeMainImage('@image.Url')">
+                            <img src="@image.Url" alt="Ảnh phụ" class="rounded" style="width: 140px; height: 140px; object-fit: cover;" />
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="mt-4">
+                <button onclick="addToCart(@Model.Id)" class="btn btn-warning btn-lg px-5 shadow-sm fw-bold">
+                    Thêm vào giỏ hàng
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mt-5 text-center">
+        <a asp-action="Index" class="btn btn-secondary btn-lg px-5 shadow-sm">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
+</div>
+
+<script>
+    function changeMainImage(newSrc) {
+        document.getElementById('mainImage').src = newSrc;
+    }
+
+    function addToCart(productId) {
+        // Gọi ngầm tới Controller mà không tải lại trang
+        fetch(`/ShoppingCart/AddToCart?id=${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 1. Cập nhật con số trên giỏ hàng góc phải
+                    let cartBadge = document.getElementById('cartBadge');
+                    if (cartBadge) {
+                        cartBadge.innerText = data.cartCount;
+                        cartBadge.classList.remove('d-none'); // Hiện lên nếu đang bị ẩn
+                    }
+
+                    // 2. Hiện Popup SweetAlert đẹp mắt
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: 'Sản phẩm đã được thêm vào giỏ hàng của bạn',
+                        showConfirmButton: false, // Ẩn nút OK
+                        timer: 1500, // Tự động đóng sau 1.5 giây
+                        toast: true, // Biến thành dạng popup nhỏ
+                        position: 'top-end' // Hiện ở góc phải trên cùng (chuẩn Shopee)
+                    });
+                }
+            })
+            .catch(error => console.error('Lỗi:', error));
+    }
+</script>

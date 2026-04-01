@@ -1,0 +1,129 @@
+﻿@model IEnumerable<TH2.Models.Product>
+
+@{
+    ViewData["Title"] = "Quản Lý Sản Phẩm";
+}
+
+<style>
+    /* Nền trang web */
+    body {
+        background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    /* Hiệu ứng kính mờ cho khung bảng */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* Hiệu ứng hover khi rê chuột vào dòng */
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+        transition: 0.2s;
+    }
+
+    /* Cắt ngắn chữ phần mô tả nếu quá dài */
+    .description-text {
+        max-width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Bo góc cho ảnh thumbnail nhỏ trong bảng */
+    .img-thumbnail-custom {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+    }
+</style>
+
+<div class="container-fluid mt-4 mb-5 px-4">
+    <div class="glass-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary fw-bold m-0"><i class="bi bi-box-seam"></i> Quản Lý Sản Phẩm</h2>
+            <a asp-action="Add" class="btn btn-success fw-bold shadow-sm px-4 py-2">
+                <i class="bi bi-plus-lg"></i> Thêm Sản Phẩm Mới
+            </a>
+        </div>
+
+        <div class="table-responsive rounded shadow-sm border">
+            <table class="table table-bordered table-hover align-middle mb-0 bg-white">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th style="width: 80px;">Hình Ảnh</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Giá Bán</th>
+                        <th>Mô Tả</th>
+                        <th style="width: 250px;">Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl" alt="@item.Name" class="img-thumbnail-custom shadow-sm" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light text-muted d-flex align-items-center justify-content-center img-thumbnail-custom mx-auto">
+                                            <i class="bi bi-image"></i>
+                                        </div>
+                                    }
+                                </td>
+
+                                <td class="fw-bold text-dark">@item.Name</td>
+
+                                <td class="text-danger fw-bold text-center">@item.Price.ToString("#,##0") đ</td>
+
+                                <td>
+                                    <div class="description-text text-muted" title="@item.Description">
+                                        @item.Description
+                                    </div>
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="btn-group shadow-sm" role="group">
+                                        <a asp-action="Display" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary fw-bold">
+                                            <i class="bi bi-eye"></i> Xem
+                                        </a>
+                                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning fw-bold">
+                                            <i class="bi bi-pencil"></i> Sửa
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger fw-bold">
+                                            <i class="bi bi-trash"></i> Xóa
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-5">
+                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                Chưa có sản phẩm nào trong cửa hàng.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

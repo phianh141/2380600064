@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Trang Chủ";
+}
+
+<style>
+    /* 1. ĐOẠN NÀY LÀM HÌNH NỀN CHO TOÀN BỘ TRANG WEB NÈ */
+    body {
+    
+        background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
+        background-size: cover; /* Ép hình phủ kín màn hình */
+        background-position: center;
+        background-attachment: fixed; /* Hiệu ứng xịn xò: cuộn chuột nhưng hình nền đứng im */
+        background-repeat: no-repeat;
+    }
+
+    /* 2. HÌNH NỀN CHO KHUNG BANNER CỦA BẠN (GIỮ NGUYÊN) */
+    .hero-banner {
+        background-image: url('/images/mclaren-765lt-night-3840x2563-20401.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 15px;
+        overflow: hidden; /* Để ảnh không bị tràn ra ngoài góc bo tròn */
+    }
+
+    /* Lớp phủ màu đen mờ giúp chữ nổi bật hơn trên nền ảnh */
+    .hero-overlay {
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 5rem 2rem; /* Tăng khoảng cách để banner to và đẹp hơn */
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="hero-banner mb-5 shadow-lg">
+        <div class="hero-overlay text-center">
+            <h1 class="display-4 fw-bold text-white mb-3">Chào mừng đến với Website Bán Hàng!</h1>
+            <p class="col-md-8 mx-auto fs-5 text-light mb-4">
+                Nơi cung cấp các sản phẩm công nghệ, laptop, điện thoại chất lượng nhất với giá cả hợp lý.
+                Hãy khám phá ngay danh sách sản phẩm của chúng tôi!
+            </p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg shadow mt-2">
+                Xem Danh Sách Sản Phẩm Ngay
+            </a>
+        </div>
+    </div>
+
+    <div class="row text-center mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="card-title text-success" style="font-size: 3rem;">📱</h2>
+                    <h4 class="card-title mt-3">Đa Dạng Sản Phẩm</h4>
+                    <p class="card-text text-muted">Hàng trăm thiết bị công nghệ mới nhất luôn được cập nhật liên tục mỗi ngày.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="card-title text-warning" style="font-size: 3rem;">⚡</h2>
+                    <h4 class="card-title mt-3">Giao Hàng Siêu Tốc</h4>
+                    <p class="card-text text-muted">Hỗ trợ giao hàng tận nơi trên toàn quốc với thời gian nhanh chóng nhất.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="card-title text-info" style="font-size: 3rem;">🛡️</h2>
+                    <h4 class="card-title mt-3">Bảo Hành Tận Tâm</h4>
+                    <p class="card-text text-muted">Chính sách bảo hành rõ ràng, hỗ trợ đổi trả 1-1 nếu có lỗi từ nhà sản xuất.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
