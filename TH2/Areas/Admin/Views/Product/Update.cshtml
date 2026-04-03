@@ -4,92 +4,124 @@
 }
 
 <style>
-    body {
-        background-image: url('/images/mclaren-765lt-night-3840x2563-20401.jpg');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
+    :root {
+        --dark-bg: #212529;
+        --gold-accent: #e5c158;
     }
 
-    .form-card {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
+    .premium-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         padding: 40px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border-top: 4px solid var(--gold-accent);
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 0.75rem 1rem;
+        font-size: 1.05rem;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 0.25rem rgba(229, 193, 88, 0.25);
+        }
+
+    .btn-gold {
+        background-color: var(--gold-accent);
+        color: var(--dark-bg);
+        font-weight: 700;
+        transition: 0.3s;
+        border: none;
+    }
+
+        .btn-gold:hover {
+            background-color: var(--dark-bg);
+            color: var(--gold-accent);
+        }
+
+    .img-preview {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #f0f0f0;
     }
 </style>
 
-<div class="container mt-5 mb-5 d-flex justify-content-center">
-    <div class="col-md-8 col-lg-6 form-card">
-        <h2 class="text-warning text-center mb-4 fw-bold">✏️ Cập Nhật Sản Phẩm</h2>
+<div class="container-fluid py-4 d-flex justify-content-center">
+    <div class="col-md-8 col-lg-6 premium-card">
+        <h2 class="text-center mb-4 fw-bold" style="color: var(--dark-bg); text-transform: uppercase; letter-spacing: 1px;">
+            <i class="bi bi-pencil-square me-2" style="color: var(--gold-accent);"></i>Chỉnh Sửa Thông Tin Xe
+        </h2>
 
         <form asp-action="Update" method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
 
             <div class="form-floating mb-3">
                 <input asp-for="Name" class="form-control" placeholder="Tên sản phẩm" />
-                <label asp-for="Name">Tên sản phẩm</label>
+                <label asp-for="Name" class="text-muted">Tên siêu xe</label>
                 <span asp-validation-for="Name" class="text-danger small"></span>
             </div>
 
             <div class="form-floating mb-3">
                 <input asp-for="Price" class="form-control" placeholder="Giá" />
-                <label asp-for="Price">Giá (VNĐ)</label>
+                <label asp-for="Price" class="text-muted">Giá bán (VNĐ)</label>
                 <span asp-validation-for="Price" class="text-danger small"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <textarea asp-for="Description" class="form-control" placeholder="Mô tả" style="height: 100px"></textarea>
-                <label asp-for="Description">Mô tả sản phẩm</label>
+                <textarea asp-for="Description" class="form-control" placeholder="Mô tả" style="height: 120px"></textarea>
+                <label asp-for="Description" class="text-muted">Mô tả thông số kỹ thuật</label>
                 <span asp-validation-for="Description" class="text-danger small"></span>
             </div>
 
             <div class="form-floating mb-3">
                 <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
-                <label asp-for="CategoryId">Danh mục sản phẩm</label>
+                <label asp-for="CategoryId" class="text-muted">Danh mục xe</label>
             </div>
 
-            <hr class="my-4" />
-
-            <div class="form-group mb-3">
-                <label class="fw-bold mb-2">Thay đổi ảnh đại diện:</label>
+            <div class="p-3 bg-light rounded border mb-3">
+                <label class="fw-bold mb-2 text-dark d-block">Cập nhật ảnh đại diện:</label>
                 @if (!string.IsNullOrEmpty(Model.ImageUrl))
                 {
-                    <div class="mb-2">
-                        <img src="@Model.ImageUrl" alt="Ảnh hiện tại" style="width: 100px; height: 100px; object-fit: cover;" class="rounded shadow-sm" />
+                    <div class="mb-3">
+                        <img src="@Model.ImageUrl" alt="Ảnh hiện tại" class="img-preview shadow-sm" />
                     </div>
                 }
-                <input type="file" name="imageUrl" class="form-control" />
+                <input type="file" name="imageUrl" class="form-control bg-white" />
             </div>
 
-            <div class="form-group mb-3">
-                <label class="fw-bold mb-2">Thêm ảnh phụ mới:</label>
-                <input type="file" name="imageUrls" class="form-control" multiple />
-            </div>
+            <div class="p-3 bg-light rounded border mb-4">
+                <label class="fw-bold mb-2 text-dark d-block">Thêm ảnh phụ mới:</label>
+                <input type="file" name="imageUrls" class="form-control bg-white mb-3" multiple />
 
-            @if (Model.Images != null && Model.Images.Any())
-            {
-                <div class="form-group mb-4">
-                    <label class="fw-bold mb-2 text-danger">Đánh dấu để xóa ảnh phụ cũ:</label>
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    <label class="fw-bold mb-2 text-danger"><i class="bi bi-trash me-1"></i>Chọn để xóa ảnh phụ cũ:</label>
                     <div class="d-flex flex-wrap gap-2">
                         @foreach (var img in Model.Images)
                         {
-                            <div class="card p-1 shadow-sm border-danger" style="width: 120px;">
-                                <img src="@img.Url" style="width: 100%; height: 90px; object-fit: cover;" class="rounded" />
-                                <div class="form-check mt-2 d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" name="deleteImageIds" value="@img.Id" id="del_@img.Id">
-                                    <label class="form-check-label ms-1 small" for="del_@img.Id">Xóa</label>
+                            <div class="position-relative">
+                                <img src="@img.Url" class="img-preview shadow-sm" style="width: 80px; height: 80px;" />
+                                <div class="form-check position-absolute top-0 end-0 bg-white rounded-circle shadow-sm m-1 p-0" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                                    <input class="form-check-input m-0" type="checkbox" name="deleteImageIds" value="@img.Id" id="del_@img.Id" style="cursor: pointer;">
                                 </div>
                             </div>
                         }
                     </div>
-                </div>
-            }
+                }
+            </div>
 
-            <div class="d-grid gap-2 mt-4">
-                <button type="submit" class="btn btn-warning btn-lg shadow-sm text-dark fw-bold">Lưu Thay Đổi</button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Hủy & Quay lại</a>
+            <div class="d-flex gap-3 mt-4">
+                <button type="submit" class="btn btn-gold btn-lg w-100 rounded-pill shadow-sm">
+                    <i class="bi bi-save me-2"></i>Lưu Thay Đổi
+                </button>
+                <a asp-action="Index" class="btn btn-light border btn-lg w-100 rounded-pill text-dark fw-bold shadow-sm">
+                    <i class="bi bi-x-circle me-2"></i>Hủy Bỏ
+                </a>
             </div>
         </form>
     </div>

@@ -4,59 +4,86 @@
 }
 
 <style>
-    body {
-        background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
-        background-size: cover;
-        background-attachment: fixed;
+    :root {
+        --dark-bg: #212529;
+        --gold-accent: #e5c158;
     }
 
-    .glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
+    .premium-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         padding: 40px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border-top: 4px solid var(--gold-accent);
     }
+
+    /* Tùy chỉnh ô nhập liệu */
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 0.75rem 1rem;
+        font-size: 1.05rem;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 0.25rem rgba(229, 193, 88, 0.25);
+        }
+
+    .btn-gold {
+        background-color: var(--gold-accent);
+        color: var(--dark-bg);
+        font-weight: 700;
+        transition: 0.3s;
+        border: none;
+    }
+
+        .btn-gold:hover {
+            background-color: var(--dark-bg);
+            color: var(--gold-accent);
+        }
 </style>
 
-<div class="container mt-5 mb-5 d-flex justify-content-center">
-    <div class="col-md-8 col-lg-6 glass-card">
-        <h2 class="text-warning text-center mb-4 fw-bold"><i class="bi bi-pencil-square"></i> Sửa Đơn Hàng #@Model.Id</h2>
+<div class="container-fluid py-4 d-flex justify-content-center">
+    <div class="col-md-8 col-lg-6 premium-card">
+        <h2 class="text-center mb-4 fw-bold" style="color: var(--dark-bg); text-transform: uppercase; letter-spacing: 1px;">
+            <i class="bi bi-pencil-square me-2" style="color: var(--gold-accent);"></i>Cập Nhật Đơn #@Model.Id
+        </h2>
 
         <form asp-action="Update" method="post">
             <input type="hidden" asp-for="Id" />
 
             <div class="form-floating mb-3">
                 <input asp-for="CustomerName" class="form-control" placeholder="Tên khách hàng" />
-                <label asp-for="CustomerName">Tên khách hàng</label>
+                <label asp-for="CustomerName" class="text-muted">Tên khách hàng</label>
                 <span asp-validation-for="CustomerName" class="text-danger small"></span>
             </div>
 
             <div class="form-floating mb-3">
                 <input asp-for="PhoneNumber" class="form-control" placeholder="Số điện thoại" />
-                <label asp-for="PhoneNumber">Số điện thoại</label>
+                <label asp-for="PhoneNumber" class="text-muted">Số điện thoại</label>
                 <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <textarea asp-for="ShippingAddress" class="form-control" placeholder="Địa chỉ giao hàng" style="height: 100px"></textarea>
-                <label asp-for="ShippingAddress">Địa chỉ giao hàng</label>
+                <textarea asp-for="ShippingAddress" class="form-control" placeholder="Địa chỉ giao hàng" style="height: 120px"></textarea>
+                <label asp-for="ShippingAddress" class="text-muted">Địa chỉ giao hàng</label>
                 <span asp-validation-for="ShippingAddress" class="text-danger small"></span>
             </div>
 
             <div class="form-floating mb-4">
                 <select asp-for="OrderStatus" class="form-select">
-                    <option value="Pending">Chờ xử lý</option>
+                    <option value="Pending">Chờ duyệt</option>
                     <option value="Shipping">Đang giao</option>
                     <option value="Completed">Hoàn thành</option>
                     <option value="Cancelled">Đã hủy</option>
                 </select>
-                <label asp-for="OrderStatus">Trạng thái đơn hàng</label>
+                <label asp-for="OrderStatus" class="text-muted">Trạng thái đơn hàng</label>
             </div>
 
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-warning btn-lg shadow-sm fw-bold">Lưu Thay Đổi</button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Hủy & Quay lại</a>
+            <div class="d-flex gap-3 mt-4">
+                <button type="submit" class="btn btn-gold btn-lg w-100 rounded-pill shadow-sm"><i class="bi bi-save me-2"></i>Lưu Thay Đổi</button>
+                <a asp-action="Index" class="btn btn-light border btn-lg w-100 rounded-pill text-dark fw-bold shadow-sm"><i class="bi bi-x-circle me-2"></i>Hủy Bỏ</a>
             </div>
         </form>
     </div>

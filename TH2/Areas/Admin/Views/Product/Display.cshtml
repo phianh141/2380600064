@@ -1,81 +1,133 @@
 ﻿@model TH2.Models.Product
 
+@{
+    ViewData["Title"] = "Chi Tiết Sản Phẩm";
+}
+
 <style>
-    body {
-       
-        background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
+    :root {
+        --dark-bg: #212529;
+        --gold-accent: #e5c158;
     }
 
-    .display-card {
-        background: rgba(255, 255, 255, 0.95); /* Nền trắng hơi mờ để nổi chữ */
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
+    .premium-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         padding: 40px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border-top: 4px solid var(--gold-accent);
     }
 
     .main-img-container {
-        height: 500px; /* Khung ảnh to hơn */
+        height: 450px;
+        background-color: #f8f9fa;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
+        border: 1px solid #f0f0f0;
+    }
+
+    .thumbnail-box {
+        cursor: pointer;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: 0.2s;
+    }
+
+        .thumbnail-box:hover {
+            border-color: var(--gold-accent);
+            transform: translateY(-3px);
+        }
+
+        .thumbnail-box img {
+            width: 100px;
+            height: 80px;
+            object-fit: cover;
+        }
+
+    .price-tag {
+        color: #d90429;
+        font-size: 2rem;
+        font-weight: 800;
     }
 </style>
 
-<div class="container mt-5 mb-5 display-card">
-    <h1 class="text-primary mb-5 fw-bold text-center">Sản phẩm: @Model.Name</h1>
+<div class="container-fluid py-4">
+    <div class="premium-card">
 
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body text-center p-2 main-img-container">
-                    <img id="mainImage" src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded" style="max-height: 480px; object-fit: contain; transition: 0.3s;" />
-                </div>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom">
+            <h2 class="fw-bold m-0" style="color: var(--dark-bg); text-transform: uppercase;">
+                <i class="bi bi-car-front-fill me-2" style="color: var(--gold-accent);"></i>@Model.Name
+            </h2>
+            <a asp-action="Index" class="btn btn-light border rounded-pill px-4 shadow-sm fw-bold">
+                <i class="bi bi-arrow-left me-2"></i>Kho Xe
+            </a>
         </div>
 
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 mb-4 bg-white">
-                <div class="card-body p-4">
-                    <h2 class="text-danger fw-bold mb-3">Giá: @Model.Price VNĐ</h2>
-                    <hr />
-                    <h4 class="mt-4 fw-bold">Mô tả sản phẩm:</h4>
-                    <p class="fs-5 text-muted mt-2" style="line-height: 1.8;">@Model.Description</p>
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="main-img-container mb-3 shadow-sm">
+                    <img id="mainImage" src="@(!string.IsNullOrEmpty(Model.ImageUrl) ? Model.ImageUrl : "/images/no-image.png")" alt="@Model.Name" class="img-fluid" style="max-height: 100%; object-fit: contain; transition: 0.3s;" />
                 </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl) || (Model.Images != null && Model.Images.Any()))
+                {
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <div class="thumbnail-box shadow-sm" onclick="changeMainImage('@Model.ImageUrl')">
+                                <img src="@Model.ImageUrl" alt="Ảnh chính" />
+                            </div>
+                        }
+
+                        @if (Model.Images != null)
+                        {
+                            foreach (var image in Model.Images)
+                            {
+                                <div class="thumbnail-box shadow-sm" onclick="changeMainImage('@image.Url')">
+                                    <img src="@image.Url" alt="Ảnh phụ" />
+                                </div>
+                            }
+                        }
+                    </div>
+                }
             </div>
 
-            @if (Model.Images != null && Model.Images.Any())
-            {
-                <h5 class="mb-3 text-secondary fw-bold">Các góc chụp khác:</h5>
-                <div class="d-flex flex-wrap gap-3">
+            <div class="col-lg-6">
+                <div class="p-4 bg-light rounded-3 border h-100">
+                    <span class="badge bg-dark mb-2 px-3 py-2 fs-6">Mã SP: #@Model.Id</span>
 
-                    <div class="border rounded p-1 shadow-sm bg-white" style="cursor: pointer;" onclick="changeMainImage('@Model.ImageUrl')">
-                        <img src="@Model.ImageUrl" alt="Ảnh chính" class="rounded" style="width: 140px; height: 140px; object-fit: cover;" />
+                    <div class="mt-3 mb-4">
+                        <span class="text-muted d-block fw-bold mb-1">Giá Niêm Yết:</span>
+                        <div class="price-tag">@Model.Price.ToString("#,##0") VNĐ</div>
                     </div>
 
-                    @foreach (var image in Model.Images)
-                    {
-                        <div class="border rounded p-1 shadow-sm bg-white" style="cursor: pointer;" onclick="changeMainImage('@image.Url')">
-                            <img src="@image.Url" alt="Ảnh phụ" class="rounded" style="width: 140px; height: 140px; object-fit: cover;" />
-                        </div>
-                    }
-                </div>
-            }
-        </div>
-    </div>
+                    <hr class="my-4 opacity-25" />
 
-    <div class="mt-5 text-center">
-        <a asp-action="Index" class="btn btn-secondary btn-lg px-5 shadow-sm">
-            <i class="bi bi-arrow-left"></i> Quay lại danh sách
-        </a>
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle-fill me-2" style="color: var(--gold-accent);"></i>Thông Số & Mô Tả</h5>
+                    <p class="fs-5 text-muted" style="line-height: 1.8; white-space: pre-wrap;">@Model.Description</p>
+
+                    <div class="mt-5 d-flex gap-3">
+                        <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-dark btn-lg px-4 rounded-pill shadow-sm">
+                            <i class="bi bi-pencil-square me-2 text-warning"></i>Chỉnh Sửa Xe Này
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script>
     function changeMainImage(newSrc) {
-        document.getElementById('mainImage').src = newSrc;
+        document.getElementById('mainImage').style.opacity = 0;
+        setTimeout(function() {
+            document.getElementById('mainImage').src = newSrc;
+            document.getElementById('mainImage').style.opacity = 1;
+        }, 200);
     }
 </script>

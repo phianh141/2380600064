@@ -33,7 +33,8 @@ builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>{options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian sống của Session
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian sống của Session
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -69,5 +70,35 @@ app.MapControllerRoute(
 
 // MapRazorPages giờ đã cùng cấp với MapControllerRoute, sẽ không bị miss Identity nữa
 app.MapRazorPages();
+
+// ==========================================
+// TẠO ROLE VÀ TÀI KHOẢN ADMIN MẶC ĐỊNH
+// ==========================================
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    // Tạo Role "Admin" nếu chưa có
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    // Tạo tài khoản Admin nếu chưa có
+    if (await userManager.FindByEmailAsync("admin@sieuxe.com") == null)
+    {
+        var adminUser = new ApplicationUser
+        {
+            UserName = "admin@sieuxe.com",
+            Email = "admin@sieuxe.com",
+            FullName = "Administrator", // Dựa vào file migration mình thấy bạn có trường FullName
+            EmailConfirmed = true
+        };
+        await userManager.CreateAsync(adminUser, "Admin123@");
+        await userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+}
+// ==========================================
 
 app.Run();

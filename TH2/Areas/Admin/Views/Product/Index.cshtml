@@ -1,70 +1,180 @@
 ﻿@model IEnumerable<TH2.Models.Product>
 
 @{
-    ViewData["Title"] = "Quản Lý Sản Phẩm";
+    ViewData["Title"] = "Kho Siêu Xe";
 }
 
 <style>
-    /* Nền trang web */
-    body {
-        background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
+    /* Biến màu sắc chuẩn Luxury */
+    :root {
+        --dark-bg: #212529;
+        --gold-accent: #e5c158; /* Vàng Gold sang trọng */
+        --text-main: #333333;
     }
 
-    /* Hiệu ứng kính mờ cho khung bảng */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    /* Card tổng bọc viền vàng nhẹ */
+    .premium-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        padding: 35px;
+        border-top: 4px solid var(--gold-accent);
     }
 
-    /* Hiệu ứng hover khi rê chuột vào dòng */
-    .table-hover tbody tr:hover {
-        background-color: rgba(13, 110, 253, 0.05);
-        transition: 0.2s;
+    /* Header của bảng: Nền đen chữ vàng */
+    .table-luxury {
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0 8px; /* Tách rời các dòng một chút */
     }
 
-    /* Cắt ngắn chữ phần mô tả nếu quá dài */
-    .description-text {
-        max-width: 250px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+        .table-luxury thead th {
+            background-color: var(--dark-bg);
+            color: var(--gold-accent);
+            font-size: 1.1rem; /* Chữ to hơn */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 18px;
+            border: none;
+        }
 
-    /* Bo góc cho ảnh thumbnail nhỏ trong bảng */
-    .img-thumbnail-custom {
-        width: 60px;
-        height: 60px;
+            .table-luxury thead th:first-child {
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+            }
+
+            .table-luxury thead th:last-child {
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+
+        /* Nội dung các dòng trong bảng */
+        .table-luxury tbody tr {
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+
+            .table-luxury tbody tr:hover {
+                transform: scale(1.005);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+                border-left: 3px solid var(--gold-accent);
+            }
+
+        .table-luxury td {
+            padding: 20px 18px; /* Rộng rãi, dễ nhìn hơn */
+            vertical-align: middle;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            color: var(--text-main);
+            font-size: 1.1rem; /* Tăng size chữ chung */
+        }
+
+    /* Hình ảnh */
+    .img-luxury {
+        width: 100px; /* Ảnh to hơn */
+        height: 70px;
+        border-radius: 6px;
         object-fit: cover;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Chữ hiển thị */
+    .product-name {
+        font-weight: 800;
+        color: var(--dark-bg);
+        font-size: 1.25rem; /* Tên xe to và đậm */
+        margin-bottom: 4px;
+    }
+
+    .product-price {
+        color: #d90429; /* Đỏ đậm sang trọng cho giá tiền */
+        font-weight: 800;
+        font-size: 1.3rem; /* Giá tiền to nhất */
+    }
+
+    .desc-text {
+        max-width: 300px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: #6c757d;
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+
+    /* Nút bấm (Thêm mới) */
+    .btn-gold {
+        background-color: var(--gold-accent);
+        color: var(--dark-bg);
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 10px 24px;
+        transition: 0.3s;
+        border: none;
+    }
+
+        .btn-gold:hover {
+            background-color: var(--dark-bg);
+            color: var(--gold-accent);
+        }
+
+    /* Các nút thao tác (Xem, Sửa, Xóa) phong cách Dark Mode */
+    .action-btn {
+        width: 42px;
+        height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         border-radius: 8px;
+        margin: 0 5px;
+        font-size: 1.2rem;
+        transition: 0.3s;
+        background: #f8f9fa;
+        color: var(--dark-bg);
         border: 1px solid #dee2e6;
+        text-decoration: none;
+    }
+
+        .action-btn:hover {
+            background: var(--dark-bg);
+            color: var(--gold-accent);
+            border-color: var(--dark-bg);
+        }
+
+    .btn-del:hover {
+        background: #d90429;
+        color: #fff;
+        border-color: #d90429;
     }
 </style>
 
-<div class="container-fluid mt-4 mb-5 px-4">
-    <div class="glass-card">
+<div class="container-fluid py-4">
+    <div class="premium-card">
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-primary fw-bold m-0"><i class="bi bi-box-seam"></i> Quản Lý Sản Phẩm</h2>
-            <a asp-action="Add" class="btn btn-success fw-bold shadow-sm px-4 py-2">
-                <i class="bi bi-plus-lg"></i> Thêm Sản Phẩm Mới
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-2">
+            <div>
+                <h2 class="fw-bold mb-1" style="color: var(--dark-bg); text-transform: uppercase; letter-spacing: 1px;">
+                    <i class="bi bi-car-front-fill me-2" style="color: var(--gold-accent);"></i>Danh Sách Siêu Xe
+                </h2>
+                <p class="text-muted fs-5 mb-0">Quản lý kho xe hiện tại của showroom</p>
+            </div>
+            <a asp-action="Add" class="btn btn-gold rounded-pill shadow-sm d-flex align-items-center">
+                <i class="bi bi-plus-lg me-2 fs-5"></i> Nhập Xe Mới
             </a>
         </div>
 
-        <div class="table-responsive rounded shadow-sm border">
-            <table class="table table-bordered table-hover align-middle mb-0 bg-white">
-                <thead class="table-dark text-center">
+        <div class="table-responsive">
+            <table class="table table-luxury align-middle">
+                <thead>
                     <tr>
-                        <th style="width: 80px;">Hình Ảnh</th>
-                        <th>Tên Sản Phẩm</th>
+                        <th class="text-center" style="width: 120px;">Hình Ảnh</th>
+                        <th>Dòng Xe</th>
                         <th>Giá Bán</th>
-                        <th>Mô Tả</th>
-                        <th style="width: 250px;">Hành Động</th>
+                        <th>Thông Số Kỹ Thuật</th>
+                        <th class="text-center" style="width: 180px;">Tùy Chọn</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,38 +186,43 @@
                                 <td class="text-center">
                                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                                     {
-                                        <img src="@item.ImageUrl" alt="@item.Name" class="img-thumbnail-custom shadow-sm" />
+                                        <img src="@item.ImageUrl" alt="@item.Name" class="img-luxury" />
                                     }
                                     else
                                     {
-                                        <div class="bg-light text-muted d-flex align-items-center justify-content-center img-thumbnail-custom mx-auto">
-                                            <i class="bi bi-image"></i>
+                                        <div class="img-luxury d-flex align-items-center justify-content-center bg-light border">
+                                            <i class="bi bi-camera-fill text-muted fs-3"></i>
                                         </div>
                                     }
                                 </td>
 
-                                <td class="fw-bold text-dark">@item.Name</td>
-
-                                <td class="text-danger fw-bold text-center">@item.Price.ToString("#,##0") đ</td>
+                                <td>
+                                    <div class="product-name">@item.Name</div>
+                                    <span class="badge text-dark mt-1 px-2 py-1" style="background-color: #f1f3f5; font-size: 0.9rem; border: 1px solid #dee2e6;">
+                                        Mã: #@item.Id
+                                    </span>
+                                </td>
 
                                 <td>
-                                    <div class="description-text text-muted" title="@item.Description">
+                                    <div class="product-price">@item.Price.ToString("#,##0") ₫</div>
+                                </td>
+
+                                <td>
+                                    <div class="desc-text" title="@item.Description">
                                         @item.Description
                                     </div>
                                 </td>
 
                                 <td class="text-center">
-                                    <div class="btn-group shadow-sm" role="group">
-                                        <a asp-action="Display" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary fw-bold">
-                                            <i class="bi bi-eye"></i> Xem
-                                        </a>
-                                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning fw-bold">
-                                            <i class="bi bi-pencil"></i> Sửa
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger fw-bold">
-                                            <i class="bi bi-trash"></i> Xóa
-                                        </a>
-                                    </div>
+                                    <a asp-action="Display" asp-route-id="@item.Id" class="action-btn" title="Xem chi tiết">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Update" asp-route-id="@item.Id" class="action-btn" title="Chỉnh sửa">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-btn btn-del" title="Xóa xe">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -115,9 +230,12 @@
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center text-muted py-5">
-                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                Chưa có sản phẩm nào trong cửa hàng.
+                            <td colspan="5" class="text-center py-5">
+                                <div class="py-4">
+                                    <i class="bi bi-box2-heart text-muted" style="font-size: 4rem;"></i>
+                                    <h4 class="mt-4 fw-bold" style="color: var(--dark-bg);">Showroom hiện đang trống</h4>
+                                    <p class="text-muted fs-5">Hãy nhập những chiếc siêu xe đầu tiên để bắt đầu kinh doanh nhé!</p>
+                                </div>
                             </td>
                         </tr>
                     }

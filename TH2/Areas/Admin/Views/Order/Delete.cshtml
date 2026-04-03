@@ -4,34 +4,40 @@
 }
 
 <style>
-    body {
-        background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
-        background-size: cover;
-        background-attachment: fixed;
+    :root {
+        --dark-bg: #212529;
     }
 
-    .glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
+    .danger-card {
+        background: #ffffff;
+        border-radius: 12px;
         padding: 40px;
-        border-top: 5px solid #dc3545;
-        box-shadow: 0 15px 35px rgba(220, 53, 69, 0.2);
+        border-top: 5px solid #d90429;
+        box-shadow: 0 15px 35px rgba(217, 4, 41, 0.1);
     }
 </style>
 
-<div class="container mt-5 d-flex justify-content-center mb-5">
-    <div class="col-md-8 col-lg-6 glass-card text-center">
+<div class="container-fluid py-5 d-flex justify-content-center">
+    <div class="col-md-8 col-lg-6 danger-card text-center">
         <div class="mb-4">
-            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 4rem;"></i>
+            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 4.5rem; filter: drop-shadow(0 4px 6px rgba(217, 4, 41, 0.3));"></i>
         </div>
-        <h2 class="text-danger mb-3 fw-bold">Xác Nhận Xóa</h2>
-        <p class="fs-5 text-muted mb-4">Bạn có chắc chắn muốn xóa đơn hàng <strong>#@Model.Id</strong> của khách <strong>@Model.CustomerName</strong> không? Hành động này không thể hoàn tác!</p>
+
+        <h2 class="text-danger mb-3 fw-bold" style="text-transform: uppercase; letter-spacing: 1px;">Xác Nhận Xóa Đơn</h2>
+
+        <p class="fs-5 text-muted mb-5">
+            Bạn có chắc chắn muốn xóa đơn đặt xe <strong>#@Model.Id</strong> của khách hàng <strong class="text-dark">@Model.CustomerName</strong> không? Hành động này sẽ xóa dữ liệu vĩnh viễn!
+        </p>
 
         <form asp-action="Delete" method="post">
             <input type="hidden" asp-for="Id" />
             <div class="d-flex justify-content-center gap-3">
-                <button type="submit" class="btn btn-danger btn-lg px-5 shadow">Có, Xóa Ngay!</button>
-                <a asp-action="Index" class="btn btn-secondary btn-lg px-5 shadow">Quay Lại</a>
+                <button type="submit" class="btn btn-danger btn-lg px-5 rounded-pill shadow-sm fw-bold">
+                    <i class="bi bi-trash3 me-2"></i>Xóa Ngay
+                </button>
+                <a asp-action="Index" class="btn btn-light border btn-lg px-5 rounded-pill text-dark shadow-sm fw-bold">
+                    <i class="bi bi-arrow-return-left me-2"></i>Quay Lại
+                </a>
             </div>
         </form>
     </div>

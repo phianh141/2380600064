@@ -5,98 +5,125 @@
 }
 
 <style>
-    /* 1. Bê nguyên ảnh nền xịn xò từ trang chi tiết sản phẩm qua */
+    /* 1. Hình nền đồng bộ với trang chủ */
     body {
         background-image: url('/images/hinh-nen-may-tinh-4k-dep (66).jpg');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
+        background-repeat: no-repeat;
     }
 
-    /* 2. Đồng bộ hiệu ứng kính mờ (giống hệt class .display-card) */
+    /* Biến màu sắc Luxury */
+    :root {
+        --dark-bg: #15171a;
+        --gold-accent: #e5c158;
+    }
+
+    /* 2. Khung giỏ hàng kính mờ Đen (Dark Glass) */
     .cart-wrapper {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
+        background: rgba(15, 15, 15, 0.85);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
         padding: 40px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        border: 1px solid rgba(229, 193, 88, 0.15);
     }
 
-    /* 3. Làm trong suốt nhẹ các thẻ con để không bị "đục" nền */
+    /* 3. Các thẻ con bên trong */
     .inner-card {
-        background: rgba(255, 255, 255, 0.6) !important;
-        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        border-radius: 12px;
     }
 
+    /* 4. Hình ảnh sản phẩm */
     .cart-item-img {
         width: 100%;
-        max-width: 100px;
-        height: 100px;
-        object-fit: contain;
-        border-radius: 12px;
-        background-color: #fff; /* Đổi nền ảnh thành trắng tinh cho sản phẩm nổi bật */
-        padding: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background-color: rgba(255,255,255,0.05);
     }
 
-    .btn-checkout {
-        background: linear-gradient(to right, #ff416c, #ff4b2b);
+    /* 5. Chữ màu vàng Gold */
+    .text-gold {
+        color: var(--gold-accent) !important;
+    }
+
+    /* 6. Nút bấm Vàng Gold chuẩn VIP */
+    .btn-gold {
+        background-color: var(--gold-accent);
+        color: var(--dark-bg);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         border: none;
+        transition: 0.3s;
     }
 
-        .btn-checkout:hover {
-            background: linear-gradient(to right, #ff4b2b, #ff416c);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
-            transition: 0.3s;
+        .btn-gold:hover {
+            background-color: #fff;
+            color: var(--dark-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(229, 193, 88, 0.3);
         }
+
+    /* Ô nhập số lượng */
+    .qty-input {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
 </style>
 
 <div class="cart-wrapper mt-5 mb-5 container">
 
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
-        <h2 class="fw-bold text-primary mb-0">
-            <i class="bi bi-cart-check me-2"></i>Giỏ hàng của bạn
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-50">
+        <h2 class="fw-bold text-gold mb-0" style="text-transform: uppercase; letter-spacing: 1px;">
+            <i class="bi bi-cart-check me-2"></i>Garage Của Bạn
         </h2>
-        <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary fw-bold shadow-sm bg-white" style="border-radius: 10px;">
-            <i class="bi bi-arrow-left me-1"></i> Tiếp tục mua sắm
+        <a asp-controller="Product" asp-action="Index" class="btn btn-outline-light fw-bold shadow-sm rounded-pill px-4">
+            <i class="bi bi-arrow-left me-1"></i> Tiếp tục chọn xe
         </a>
     </div>
 
     @if (Model != null && Model.Any())
     {
-        <div class="row">
+        <div class="row g-4">
             <div class="col-lg-8">
-                <div class="card shadow-sm mb-4 inner-card" style="border-radius: 15px;">
+                <div class="card shadow-sm inner-card h-100">
                     <div class="card-body p-4">
                         @foreach (var item in Model)
                         {
                             <div class="row align-items-center mb-4 pb-4 border-bottom border-secondary border-opacity-25">
                                 <div class="col-md-2 col-4 text-center">
-                                    <img src="@item.ImageUrl" alt="@item.Name" class="cart-item-img">
+                                    <img src="@(!string.IsNullOrEmpty(item.ImageUrl) ? item.ImageUrl : "/images/no-image.png")" alt="@item.Name" class="cart-item-img shadow-sm">
                                 </div>
 
                                 <div class="col-md-4 col-8">
-                                    <h5 class="fw-bold mb-2 text-dark">@item.Name</h5>
-                                    <p class="text-muted mb-0">Đơn giá: <span class="fw-bold text-danger">@item.Price.ToString("#,##0") đ</span></p>
+                                    <h5 class="fw-bold mb-2 text-white">@item.Name</h5>
+                                    <p class="text-muted mb-0">Niêm yết: <span class="fw-bold text-gold">@item.Price.ToString("#,##0") ₫</span></p>
                                 </div>
 
                                 <div class="col-md-3 col-6 mt-3 mt-md-0">
                                     <div class="d-flex align-items-center justify-content-md-center">
                                         <span class="me-2 text-muted fw-bold">SL:</span>
-                                        <input type="number" class="form-control text-center shadow-none border-0 fw-bold"
-                                               value="@item.Quantity" min="1" readonly style="width: 70px; border-radius: 10px; background-color: rgba(255,255,255,0.8);">
+                                        <input type="number" class="form-control text-center shadow-none fw-bold qty-input"
+                                               value="@item.Quantity" min="1" readonly style="width: 70px; border-radius: 8px;">
                                     </div>
                                 </div>
 
                                 <div class="col-md-2 col-4 mt-3 mt-md-0 text-end text-md-center">
-                                    <h6 class="fw-bold text-danger mb-0 fs-5">@item.Total.ToString("#,##0") đ</h6>
+                                    <h5 class="fw-bold text-danger mb-0">@item.Total.ToString("#,##0") ₫</h5>
                                 </div>
 
                                 <div class="col-md-1 col-2 mt-3 mt-md-0 text-end">
                                     <a asp-controller="ShoppingCart" asp-action="RemoveFromCart" asp-route-id="@item.ProductId"
-                                       class="btn btn-danger btn-sm rounded-circle shadow-sm" style="width: 35px; height: 35px; padding-top: 5px;" title="Xóa khỏi giỏ">
-                                        <i class="bi bi-trash3-fill"></i>
+                                       class="btn btn-outline-danger btn-sm rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center"
+                                       style="width: 38px; height: 38px;" title="Xóa khỏi garage">
+                                        <i class="bi bi-trash3-fill fs-6"></i>
                                     </a>
                                 </div>
                             </div>
@@ -105,42 +132,51 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 mt-4 mt-lg-0">
-                <div class="card shadow-sm p-4 inner-card" style="border-radius: 15px; position: sticky; top: 100px;">
-                    <h4 class="fw-bold mb-4 text-dark">Tóm tắt đơn hàng</h4>
+            <div class="col-lg-4">
+                <div class="card shadow-sm p-4 inner-card" style="position: sticky; top: 100px;">
+                    <h4 class="fw-bold mb-4 text-gold border-bottom border-secondary border-opacity-50 pb-3">Tóm Tắt Chi Phí</h4>
 
-                    <div class="d-flex justify-content-between mb-3 text-dark">
-                        <span class="fw-semibold">Tổng tiền hàng:</span>
-                        <span class="fw-bold">@Model.Sum(m => m.Total).ToString("#,##0") đ</span>
+                    <div class="d-flex justify-content-between mb-3 text-light">
+                        <span class="fw-semibold">Tổng tiền xe:</span>
+                        <span class="fw-bold">@Model.Sum(m => m.Total).ToString("#,##0") ₫</span>
                     </div>
 
-                    <div class="d-flex justify-content-between mb-3 text-dark">
-                        <span class="fw-semibold">Phí vận chuyển:</span>
+                    <div class="d-flex justify-content-between mb-3 text-light">
+                        <span class="fw-semibold">Phí vận chuyển VIP:</span>
                         <span class="text-success fw-bold">Miễn phí</span>
                     </div>
 
-                    <hr class="my-4 border-secondary border-opacity-25">
-
-                    <div class="d-flex justify-content-between mb-4">
-                        <span class="fw-bold fs-5 text-dark">Tổng cộng:</span>
-                        <span class="fw-bold fs-4 text-danger">@Model.Sum(m => m.Total).ToString("#,##0") đ</span>
+                    <div class="d-flex justify-content-between mb-3 text-light">
+                        <span class="fw-semibold">Thuế VAT (Bao gồm):</span>
+                        <span class="text-muted fw-bold">0 ₫</span>
                     </div>
 
-                    <a href="#" class="btn btn-checkout btn-lg w-100 rounded-pill fw-bold text-white shadow">
-                        <i class="bi bi-credit-card me-2"></i>Thanh toán ngay
+                    <hr class="my-4 border-secondary border-opacity-50">
+
+                    <div class="d-flex justify-content-between mb-4 align-items-end">
+                        <span class="fw-bold fs-5 text-light">Tổng thanh toán:</span>
+                        <span class="fw-bold fs-3 text-danger" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">@Model.Sum(m => m.Total).ToString("#,##0") ₫</span>
+                    </div>
+
+                    <a href="#" class="btn btn-gold btn-lg w-100 rounded-pill py-3 shadow">
+                        <i class="bi bi-shield-check me-2 fs-5"></i>Xác Nhận Đặt Xe
                     </a>
+                    <p class="text-center text-muted mt-3 mb-0" style="font-size: 0.85rem;"><i class="bi bi-lock-fill me-1"></i>Thanh toán bảo mật 100%</p>
                 </div>
             </div>
         </div>
     }
     else
     {
-        <div class="text-center py-5 my-5 inner-card shadow-sm" style="border-radius: 20px;">
-            <i class="bi bi-cart-x text-muted" style="font-size: 6rem; opacity: 0.5;"></i>
-            <h3 class="mt-4 fw-bold text-dark">Giỏ hàng của bạn đang trống</h3>
-            <p class="text-dark fs-5">Hãy chọn thêm vài món đồ ưng ý vào giỏ hàng nhé!</p>
-            <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg rounded-pill mt-3 px-5 shadow-sm fw-bold">
-                <i class="bi bi-bag-heart me-2"></i>Mua sắm ngay
+        <div class="text-center py-5 my-5 inner-card shadow-sm">
+            <div class="mb-4 position-relative d-inline-block">
+                <i class="bi bi-shield-lock text-muted" style="font-size: 7rem; opacity: 0.2;"></i>
+                <i class="bi bi-car-front-fill text-gold position-absolute top-50 start-50 translate-middle" style="font-size: 3rem;"></i>
+            </div>
+            <h3 class="fw-bold text-white mb-3">Garage của bạn đang trống</h3>
+            <p class="text-muted fs-5 mb-5">Bạn chưa chọn siêu xe nào. Hãy khám phá bộ sưu tập ngay!</p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-gold btn-lg rounded-pill px-5 shadow fw-bold">
+                <i class="bi bi-key-fill me-2"></i>Đến Showroom
             </a>
         </div>
     }

@@ -4,71 +4,76 @@
 }
 
 <style>
-    body {
-        background-image: url('/images/mclaren-765lt-night-3840x2563-20401.jpg');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
+    :root {
+        --dark-bg: #212529;
     }
 
-    .form-card {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
+    .danger-card {
+        background: #ffffff;
+        border-radius: 12px;
         padding: 40px;
-        box-shadow: 0 15px 35px rgba(220, 53, 69, 0.2);
-        border-top: 5px solid #dc3545;
+        border-top: 5px solid #d90429;
+        box-shadow: 0 15px 35px rgba(217, 4, 41, 0.1);
+    }
+
+    .info-box {
+        background-color: #f8f9fa;
+        border: 1px solid #f0f0f0;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .img-thumb {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 </style>
 
-<div class="container mt-5 d-flex justify-content-center mb-5">
-    <div class="col-md-8 col-lg-6 form-card text-center">
+<div class="container-fluid py-5 d-flex justify-content-center">
+    <div class="col-md-8 col-lg-6 danger-card text-center">
 
         <div class="mb-4">
-            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 4rem;"></i>
+            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 4.5rem; filter: drop-shadow(0 4px 6px rgba(217, 4, 41, 0.3));"></i>
         </div>
 
-        <h2 class="text-danger mb-3 fw-bold">Xác Nhận Xóa</h2>
-        <p class="fs-5 text-muted mb-4">Bạn có chắc chắn muốn xóa sản phẩm <strong class="text-dark">@Model.Name</strong> không? Hành động này không thể hoàn tác!</p>
+        <h2 class="text-danger mb-3 fw-bold" style="text-transform: uppercase; letter-spacing: 1px;">Xác Nhận Xóa Siêu Xe</h2>
+        <p class="fs-5 text-muted mb-4">Bạn có chắc chắn muốn xóa vĩnh viễn <strong class="text-dark">@Model.Name</strong> khỏi kho không?</p>
 
-        <div class="bg-light p-4 rounded-3 mb-4 text-start border">
-            <p class="mb-2"><strong>Giá:</strong> <span class="text-danger fw-bold">@Model.Price.ToString("#,##0") VNĐ</span></p>
-            <p class="mb-4"><strong>Mô tả:</strong> @Model.Description</p>
+        <div class="info-box mb-4 text-start">
+            <p class="mb-2 fs-5"><strong>Giá bán:</strong> <span class="text-danger fw-bold">@Model.Price.ToString("#,##0") VNĐ</span></p>
+            <p class="mb-3"><strong>Mô tả:</strong> <span class="text-muted">@Model.Description</span></p>
 
-            <hr class="text-muted" />
+            <hr class="text-muted opacity-25" />
 
-            <p class="mb-2 fw-bold text-secondary">Ảnh đại diện:</p>
-            @if (!string.IsNullOrEmpty(Model.ImageUrl))
-            {
-                <div class="mb-4 text-center">
-                    <img src="@Model.ImageUrl" style="width: 140px; height: 140px; object-fit: cover;" class="rounded shadow-sm border border-2 border-white" />
-                </div>
-            }
-            else
-            {
-                <p class="text-muted small fst-italic">Không có ảnh đại diện</p>
-            }
-
-            <p class="mb-2 fw-bold text-secondary">Các góc chụp khác (Ảnh phụ):</p>
-            @if (Model.Images != null && Model.Images.Any())
-            {
-                <div class="d-flex flex-wrap gap-2 justify-content-center">
-                    @foreach (var img in Model.Images)
+            <p class="mb-2 fw-bold text-dark">Ảnh lưu trữ:</p>
+            <div class="d-flex flex-wrap gap-2 justify-content-start">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" class="img-thumb" title="Ảnh đại diện" />
+                }
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    foreach (var img in Model.Images)
                     {
-                        <img src="@img.Url" style="width: 80px; height: 80px; object-fit: cover;" class="rounded shadow-sm border border-2 border-white" />
+                        <img src="@img.Url" class="img-thumb" title="Ảnh phụ" />
                     }
-                </div>
-            }
-            else
-            {
-                <p class="text-muted small text-center fst-italic">Không có ảnh phụ</p>
-            }
+                }
+            </div>
         </div>
 
         <form asp-action="Delete" method="post">
             <input type="hidden" asp-for="Id" />
             <div class="d-flex justify-content-center gap-3">
-                <button type="submit" class="btn btn-danger btn-lg px-5 shadow">Có, Xóa Ngay!</button>
-                <a asp-action="Index" class="btn btn-secondary btn-lg px-5 shadow">Quay Lại</a>
+                <button type="submit" class="btn btn-danger btn-lg px-5 rounded-pill shadow-sm fw-bold">
+                    <i class="bi bi-trash3 me-2"></i>Có, Xóa Ngay
+                </button>
+                <a asp-action="Index" class="btn btn-light border btn-lg px-5 rounded-pill text-dark shadow-sm fw-bold">
+                    <i class="bi bi-arrow-return-left me-2"></i>Quay Lại
+                </a>
             </div>
         </form>
 

@@ -45,7 +45,7 @@ namespace TH2.Controllers
                 var product = await _productRepository.GetByIdAsync(id);
                 if (product == null)
                 {
-                    return NotFound();
+                    return NotFound("Không tìm thấy siêu xe này trong hệ thống.");
                 }
 
                 item = new CartItem
@@ -54,7 +54,7 @@ namespace TH2.Controllers
                     Name = product.Name,
                     Price = product.Price,
                     Quantity = quantity,
-                    ImageUrl = product.ImageUrl // Hoặc product.Images.FirstOrDefault() tùy cấu trúc Model của bạn
+                    ImageUrl = product.ImageUrl // Lấy ảnh đại diện
                 };
                 myCart.Add(item);
             }
@@ -66,11 +66,8 @@ namespace TH2.Controllers
             // Lưu lại vào session
             HttpContext.Session.SetJson("Cart", myCart);
 
-            // Tính lại tổng số lượng để update cái chấm đỏ trên navbar
-            int totalQuantity = myCart.Sum(c => c.Quantity);
-
-            // Trả về JSON thay vì chuyển trang
-            return Json(new { success = true, cartCount = totalQuantity });
+            // ĐÃ SỬA: Chuyển hướng thẳng sang trang hiển thị Giỏ hàng
+            return RedirectToAction("Index");
         }
 
         // 3. Xóa sản phẩm khỏi giỏ
