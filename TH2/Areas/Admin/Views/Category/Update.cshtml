@@ -1,0 +1,71 @@
+﻿@model TH2.Models.Category
+@{
+    ViewData["Title"] = "Cập Nhật Danh Mục";
+}
+
+<style>
+    :root {
+        --dark-bg: #212529;
+        --gold-accent: #e5c158;
+    }
+
+    .premium-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        padding: 40px;
+        border-top: 4px solid var(--gold-accent);
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 0.75rem 1rem;
+        font-size: 1.05rem;
+    }
+
+        .form-control:focus {
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 0.25rem rgba(229, 193, 88, 0.25);
+        }
+
+    .btn-gold {
+        background-color: var(--gold-accent);
+        color: var(--dark-bg);
+        font-weight: 700;
+        transition: 0.3s;
+        border: none;
+    }
+
+        .btn-gold:hover {
+            background-color: var(--dark-bg);
+            color: var(--gold-accent);
+        }
+</style>
+
+<div class="container-fluid py-5 d-flex justify-content-center">
+    <div class="col-md-6 premium-card">
+        <h2 class="text-center mb-4 fw-bold" style="color: var(--dark-bg); text-transform: uppercase; letter-spacing: 1px;">
+            <i class="bi bi-pencil-square me-2" style="color: var(--gold-accent);"></i>Sửa Danh Mục #@Model.Id
+        </h2>
+
+        <form asp-action="Update" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-floating mb-4 mt-4">
+                <input asp-for="Name" class="form-control" placeholder="Tên danh mục" />
+                <label asp-for="Name" class="text-muted">Tên thương hiệu / Loại xe</label>
+                <span asp-validation-for="Name" class="text-danger small fw-bold"></span>
+            </div>
+
+            <div class="d-flex gap-3 mt-5">
+                <button type="submit" class="btn btn-gold btn-lg w-100 rounded-pill shadow-sm">
+                    <i class="bi bi-check2-circle me-2"></i>Cập Nhật
+                </button>
+                <a asp-action="Index" class="btn btn-light border btn-lg w-100 rounded-pill text-dark fw-bold shadow-sm">
+                    <i class="bi bi-x-circle me-2"></i>Hủy Bỏ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

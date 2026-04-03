@@ -1,0 +1,44 @@
+﻿@model TH2.Models.Category
+@{
+    ViewData["Title"] = "Xóa Danh Mục";
+}
+
+<style>
+    .danger-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 40px;
+        border-top: 5px solid #d90429;
+        box-shadow: 0 15px 35px rgba(217, 4, 41, 0.1);
+    }
+</style>
+
+<div class="container-fluid py-5 d-flex justify-content-center">
+    <div class="col-md-6 danger-card text-center">
+
+        <div class="mb-4">
+            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 4.5rem; filter: drop-shadow(0 4px 6px rgba(217, 4, 41, 0.3));"></i>
+        </div>
+
+        <h2 class="text-danger mb-3 fw-bold" style="text-transform: uppercase; letter-spacing: 1px;">Xác Nhận Xóa</h2>
+        <p class="fs-5 text-muted mb-4">Bạn có chắc chắn muốn xóa danh mục <strong class="text-dark fs-4">"@Model.Name"</strong> không?</p>
+
+        <div class="alert alert-warning text-start mb-5" role="alert">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            <strong>Lưu ý:</strong> Nếu bạn xóa danh mục này, hãy đảm bảo không có siêu xe nào đang thuộc danh mục này để tránh lỗi hệ thống.
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-danger btn-lg px-5 rounded-pill shadow-sm fw-bold">
+                    <i class="bi bi-trash3 me-2"></i>Xóa Vĩnh Viễn
+                </button>
+                <a asp-action="Index" class="btn btn-light border btn-lg px-5 rounded-pill text-dark shadow-sm fw-bold">
+                    <i class="bi bi-arrow-return-left me-2"></i>Quay Lại
+                </a>
+            </div>
+        </form>
+
+    </div>
+</div>

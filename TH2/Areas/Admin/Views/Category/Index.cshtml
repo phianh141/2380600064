@@ -1,0 +1,174 @@
+﻿@model IEnumerable<TH2.Models.Category>
+
+@{
+    ViewData["Title"] = "Quản Lý Danh Mục";
+}
+
+<style>
+    :root {
+        --dark-bg: #212529;
+        --gold-accent: #e5c158;
+        --text-main: #333333;
+    }
+
+    .premium-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        padding: 35px;
+        border-top: 4px solid var(--gold-accent);
+    }
+
+    .table-luxury {
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
+
+        .table-luxury thead th {
+            background-color: var(--dark-bg);
+            color: var(--gold-accent);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 18px;
+            border: none;
+        }
+
+            .table-luxury thead th:first-child {
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+            }
+
+            .table-luxury thead th:last-child {
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+
+        .table-luxury tbody tr {
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+
+            .table-luxury tbody tr:hover {
+                transform: scale(1.005);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+                border-left: 3px solid var(--gold-accent);
+            }
+
+        .table-luxury td {
+            padding: 20px 18px;
+            vertical-align: middle;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1.1rem;
+        }
+
+    .btn-gold {
+        background-color: var(--gold-accent);
+        color: var(--dark-bg);
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 10px 24px;
+        transition: 0.3s;
+        border: none;
+    }
+
+        .btn-gold:hover {
+            background-color: var(--dark-bg);
+            color: var(--gold-accent);
+        }
+
+    .action-btn {
+        width: 42px;
+        height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin: 0 5px;
+        font-size: 1.2rem;
+        transition: 0.3s;
+        background: #f8f9fa;
+        color: var(--dark-bg);
+        border: 1px solid #dee2e6;
+        text-decoration: none;
+    }
+
+        .action-btn:hover {
+            background: var(--dark-bg);
+            color: var(--gold-accent);
+            border-color: var(--dark-bg);
+        }
+
+    .btn-del:hover {
+        background: #d90429;
+        color: #fff;
+        border-color: #d90429;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="premium-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-2">
+            <div>
+                <h2 class="fw-bold mb-1" style="color: var(--dark-bg); text-transform: uppercase; letter-spacing: 1px;">
+                    <i class="bi bi-tags-fill me-2" style="color: var(--gold-accent);"></i>Danh Mục Xe
+                </h2>
+                <p class="text-muted fs-5 mb-0">Quản lý các thương hiệu và phân khúc siêu xe</p>
+            </div>
+            <a asp-action="Add" class="btn btn-gold rounded-pill shadow-sm d-flex align-items-center">
+                <i class="bi bi-plus-lg me-2 fs-5"></i> Thêm Hãng Mới
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-luxury align-middle">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;" class="text-center">ID</th>
+                        <th>Tên Danh Mục (Thương Hiệu)</th>
+                        <th class="text-center" style="width: 180px;">Tùy Chọn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center fw-bold text-muted">#@item.Id</td>
+                                <td class="fw-bold" style="font-size: 1.25rem; color: var(--dark-bg);">
+                                    <i class="bi bi-bookmark-star-fill text-warning me-2 fs-5"></i>@item.Name
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Update" asp-route-id="@item.Id" class="action-btn" title="Chỉnh sửa">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-btn btn-del" title="Xóa danh mục">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-5">
+                                <div class="py-4">
+                                    <i class="bi bi-collection text-muted" style="font-size: 4rem;"></i>
+                                    <h4 class="mt-4 fw-bold" style="color: var(--dark-bg);">Chưa có danh mục nào</h4>
+                                    <p class="text-muted fs-5">Hãy thêm các hãng xe (như Lamborghini, Ferrari...) để phân loại sản phẩm.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
